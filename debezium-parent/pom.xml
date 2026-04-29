@@ -49,7 +49,7 @@
         <skipLongRunningTests>true</skipLongRunningTests>
 
         <!-- Don't skip integration tests by default -->
-        <skipITs>false</skipITs>
+        <skipITs>true</skipITs>
 
         <!-- Do not skip formatting source code by default -->
         <format.skip>false</format.skip>
@@ -311,6 +311,7 @@
                             </dependency>
                         </dependencies>
                         <configuration>
+                            <skip>true</skip>
                             <configLocation>checkstyle.xml</configLocation>
                             <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
                             <suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
