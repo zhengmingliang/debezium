@@ -193,7 +193,18 @@ public class PostgresOffsetContext implements OffsetContext {
 
         private Long readOptionalLong(Map<String, ?> offset, String key) {
             final Object obj = offset.get(key);
-            return (obj == null) ? null : ((Number) obj).longValue();
+            if (obj == null) {
+                return null;
+            }
+            if (obj instanceof Number) {
+                return ((Number) obj).longValue();
+            }
+            try {
+                return Long.parseLong(obj.toString());
+            }
+            catch (NumberFormatException ne) {
+                return Lsn.valueOf((String) obj).asLong();
+            }
         }
 
         @SuppressWarnings("unchecked")

@@ -70,7 +70,7 @@ public class TypeRegistry {
             + "FROM pg_catalog.pg_type t "
             + "JOIN pg_catalog.pg_namespace n ON (t.typnamespace = n.oid) "
             + "LEFT JOIN (" + SQL_ENUM_VALUES + ") e ON (t.oid = e.id) "
-            + "WHERE n.nspname != 'pg_toast'";
+            + "WHERE n.nspname != 'pg_toast' and t.typtypmod != 0";
 
     private static final String SQL_NAME_LOOKUP = SQL_TYPES + " AND t.typname = ?";
 
@@ -165,7 +165,6 @@ public class TypeRegistry {
     }
 
     /**
-     *
      * @param oid - PostgreSQL OID
      * @return type associated with the given OID
      */
@@ -182,7 +181,6 @@ public class TypeRegistry {
     }
 
     /**
-     *
      * @param name - PostgreSQL type name
      * @return type associated with the given type name
      */
