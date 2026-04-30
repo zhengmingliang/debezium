@@ -30,6 +30,7 @@ import com.huawei.gauss200.jdbc.util.PGInterval;
 
 import io.debezium.annotation.ThreadSafe;
 import io.debezium.connector.gaussdb.PostgresValueConverter;
+import io.debezium.connector.gaussdb.utils.TimeUtil;
 import io.debezium.relational.Column;
 import io.debezium.relational.DefaultValueConverter;
 import io.debezium.relational.ValueConverter;
@@ -166,7 +167,7 @@ public class PostgresDefaultValueConverter implements DefaultValueConverter {
         result.put("xml", (c, v) -> extractDefault(v, "")); // Sample value: '<foo>bar</foo>'::xml
 
         result.put("uuid", (c, v) -> UUID.fromString(extractDefault(v, "00000000-0000-0000-0000-000000000000"))); // Sample value: '76019d1a-ad2e-4b22-96e9-1a6d6543c818'::uuid
-        io.debezium.connector.gaussdb.utils.TimestampUtils timeUtil = new io.debezium.connector.gaussdb.utils.TimestampUtils(timestampUtils);
+        TimeUtil timeUtil = new TimeUtil(timestampUtils);
         result.put("date", (c, v) -> timeUtil.toLocalDateTime(extractDefault(v, "1970-01-01")));
         result.put("time", (c, v) -> timeUtil.toLocalTime(extractDefault(v, "00:00")));
         result.put("timestamp", (c, v) -> timeUtil.toOffsetDateTime(extractDefault(v, "1970-01-01")));

@@ -45,7 +45,7 @@ import com.huawei.gauss200.jdbc.util.PSQLState;
 /**
  * Misc utils for handling time and date values.
  */
-public class TimestampUtils {
+public class TimeUtil {
     /**
      * Number of milliseconds in one day.
      */
@@ -139,13 +139,14 @@ public class TimestampUtils {
     private final boolean usesDouble;
     private final Provider<TimeZone> timeZoneProvider;
 
-    public TimestampUtils(com.huawei.gauss200.jdbc.jdbc.TimestampUtils utils) {
+    public TimeUtil(com.huawei.gauss200.jdbc.jdbc.TimestampUtils utils) {
 
-        boolean usesDouble = false;
         try {
-            Field usesDoubleField = TimestampUtils.class.getDeclaredField("usesDouble");
+            Field usesDoubleField = com.huawei.gauss200.jdbc.jdbc.TimestampUtils.class.getDeclaredField("usesDouble");
             usesDoubleField.setAccessible(true); // 设置可访问私有字段
-            usesDouble = usesDoubleField.getBoolean(utils);
+            // 从 utils 对象中获取 usesDouble 字段的值
+            Object usesDoubleValue = usesDoubleField.get(utils);
+            this.usesDouble = (Boolean) usesDoubleValue;
         }
         catch (IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -158,9 +159,10 @@ public class TimestampUtils {
         Field timeZoneProviderField;
         Provider<TimeZone> timeZoneProvider;
         try {
-            timeZoneProviderField = TimestampUtils.class.getDeclaredField("timeZoneProvider");
+            timeZoneProviderField = com.huawei.gauss200.jdbc.jdbc.TimestampUtils.class.getDeclaredField("timeZoneProvider");
             timeZoneProviderField.setAccessible(true); // 设置可访问私有字段
             timeZoneProvider = (Provider<TimeZone>) timeZoneProviderField.get(utils);
+            this.timeZoneProvider = timeZoneProvider;
         }
         catch (NoSuchFieldException e) {
             throw new RuntimeException(e);
@@ -168,12 +170,9 @@ public class TimestampUtils {
         catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-
-        this.usesDouble = usesDouble;
-        this.timeZoneProvider = timeZoneProvider;
     }
 
-    public TimestampUtils(boolean usesDouble, Provider<TimeZone> timeZoneProvider) {
+    public TimeUtil(boolean usesDouble, Provider<TimeZone> timeZoneProvider) {
         this.usesDouble = usesDouble;
         this.timeZoneProvider = timeZoneProvider;
     }
